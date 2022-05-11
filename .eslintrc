@@ -1,0 +1,37 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "jest": true
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended",
+    "plugin:react/recommended"
+  ],
+  "plugins": ["react", "fp"],
+  "settings": {},
+  "globals": {},
+  "rules": {
+    "react/prop-types": 0,
+    "eqeqeq": "error",
+    "no-var": "error",
+    "arrow-body-style": "error",
+    "curly": "error",
+    "complexity": ["error", { "max": 6 }],
+    "max-lines-per-function": [
+      "error",
+      { "max": 120, "skipBlankLines": true, "skipComments": true }
+    ],
+    "require-atomic-updates": 1,
+    "fp/no-let": "error"
+  }
+}
