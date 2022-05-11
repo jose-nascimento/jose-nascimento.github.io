@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Octokit } from '@octokit/rest';
 import RepoTable from './table';
 import Toolbar from './toolbar';
+import Pagination from './pagination';
 
 const octokit = new Octokit({
   userAgent: 'github/jose-nascimento',
@@ -12,6 +13,8 @@ export default function Main() {
   const [sort, setSort] = useState({});
   const [filter, setFilter] = useState();
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState();
+
   const { sort: param, direction } = sort;
   const changeSort = (sort, param) => {
     if (sort.sort !== param) {
@@ -23,6 +26,14 @@ export default function Main() {
     return setSort({ sort: param, direction: newDirection });
   };
 
+  const goBack = () => {
+    setPage(page - 1);
+  };
+
+  const goForward = () => {
+    setPage(page + 1);
+  };
+
   useEffect(() => {
     octokit.rest.repos
       .listForUser({
@@ -30,9 +41,13 @@ export default function Main() {
         sort: param,
         direction,
         type: filter,
+        page,
       })
       .then(({ data }) => setData(data));
   }, [param, direction, filter]);
+
+  const hasNext = data.length === 30;
+  const hasBack = page && page > 1;
 
   const searchTerm = search.toLowerCase();
   const filteredData = search
@@ -48,6 +63,14 @@ export default function Main() {
         setSearch={setSearch}
       />
       <RepoTable data={filteredData} sort={sort} changeSort={changeSort} />
+      {(hasNext || hasBack) && (
+        <Pagination
+          hasBack={hasBack}
+          hasNext={hasNext}
+          goBack={goBack}
+          goForward={goForward}
+        />
+      )}
     </main>
   );
 }
