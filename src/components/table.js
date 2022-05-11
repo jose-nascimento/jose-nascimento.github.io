@@ -13,15 +13,37 @@ function TableItem({ id, name, created_at, updated_at, pushed_at, html_url }) {
   );
 }
 
-export default function RepoTable({ data }) {
+export default function RepoTable({ data, sort, changeSort }) {
+  const { sort: param, direction } = sort;
+  const arrow = direction === 'desc' ? 'down' : 'up';
   return (
     <Table striped bordered hover>
       <thead>
         <tr>
-          <th>Nome</th>
-          <th>Data de Criação</th>
-          <th>Última Atualização</th>
-          <th>Último Push</th>
+          <th onClick={() => changeSort(sort, 'full_name')}>
+            Nome{' '}
+            {param === 'full_name' && (
+              <i className={`bi bi-caret-${arrow}-fill`}></i>
+            )}
+          </th>
+          <th onClick={() => changeSort(sort, 'created')}>
+            Data de Criação{' '}
+            {param === 'created' && (
+              <i className={`bi bi-caret-${arrow}-fill`}></i>
+            )}
+          </th>
+          <th onClick={() => changeSort(sort, 'updated')}>
+            Última Atualização{' '}
+            {param === 'updated' && (
+              <i className={`bi bi-caret-${arrow}-fill`}></i>
+            )}
+          </th>
+          <th onClick={() => changeSort(sort, 'pushed')}>
+            Último Push{' '}
+            {param === 'pushed' && (
+              <i className={`bi bi-caret-${arrow}-fill`}></i>
+            )}
+          </th>
         </tr>
       </thead>
       <tbody>{data.map((repo) => TableItem(repo))}</tbody>
