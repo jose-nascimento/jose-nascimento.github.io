@@ -21,7 +21,6 @@ body {
   flex-direction: column;
   justify-content: center;
   font-size: 1.2rem;
-  color: white;
   width: 75vw;
 }
 
@@ -29,6 +28,26 @@ body {
   cursor: pointer;
 }
 
-.App-link {
-  color: #61dafb;
+.App menu {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 0;
+}
+
+.filters, .search {
+  display: flex;
+  flex: 0 1 auto;
+}
+
+.filters select {
+  width: auto;
+}
+
+.search input {
+  width: auto;
+}
+
+.filters label, .search label {
+  display: block;
+  padding-right: 1rem;
 }

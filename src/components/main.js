@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Octokit } from '@octokit/rest';
 import RepoTable from './table';
+import Toolbar from './toolbar';
 
 const octokit = new Octokit({
   userAgent: 'github/jose-nascimento',
@@ -9,6 +10,8 @@ const octokit = new Octokit({
 export default function Main() {
   const [data, setData] = useState([]);
   const [sort, setSort] = useState({});
+  const [filter, setFilter] = useState();
+  const [search, setSearch] = useState('');
   const { sort: param, direction } = sort;
   const changeSort = (sort, param) => {
     if (sort.sort !== param) {
@@ -22,13 +25,29 @@ export default function Main() {
 
   useEffect(() => {
     octokit.rest.repos
-      .listForUser({ username: 'jose-nascimento', sort: param, direction })
+      .listForUser({
+        username: 'jose-nascimento',
+        sort: param,
+        direction,
+        type: filter,
+      })
       .then(({ data }) => setData(data));
-  }, [param, direction]);
+  }, [param, direction, filter]);
+
+  const searchTerm = search.toLowerCase();
+  const filteredData = search
+    ? data.filter((repo) => repo.name.toLowerCase().includes(searchTerm))
+    : data;
 
   return (
     <main>
-      <RepoTable data={data} sort={sort} changeSort={changeSort} />
+      <Toolbar
+        filter={filter}
+        search={search}
+        setFilter={setFilter}
+        setSearch={setSearch}
+      />
+      <RepoTable data={filteredData} sort={sort} changeSort={changeSort} />
     </main>
   );
 }
